@@ -54,7 +54,7 @@ def pytest_configure_node(node):
         # Stop now if the plugin is not properly configured
         return
     node.workerinput['py_test_service'] = pickle.dumps(node.config.
-                                                      py_test_service)
+        py_test_service)
 
 
 @pytest.hookimpl(trylast=True)
