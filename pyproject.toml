@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "agent-python-pytest"
+version = "5.0.5"
+description = "Agent for Reporting results of tests to the Report Portal"
+authors = ["epam"]
+license = "Apache-2.0"
+
+[tool.poetry.dependencies]
+python = ">=3.6"
+dill = ">=0.2.7.1"
+pytest = ">=5.0.0"
+reportportal-client = ">=5.0.3"
+six = ">=1.13.0"
+
+[tool.poetry.dev-dependencies]
+delayed-assert = "^0.3.2"
+pycodestyle ="*" 
+pydocstyle = "*"
+
+[tool.poetry.plugins.pytest11]
+pytest_reportportal = "pytest_reportportal.plugin"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

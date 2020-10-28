@@ -1,6 +1,6 @@
 """This modules includes unit tests for the service.py module."""
 
-from six.moves import mock
+import mock
 
 from delayed_assert import expect, assert_expectations
 import pytest

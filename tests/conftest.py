@@ -1,6 +1,6 @@
 """This module contains common Pytest fixtures and hooks for unit tests."""
 
-from six.moves import mock
+import mock
 
 import py
 from _pytest.config import Config

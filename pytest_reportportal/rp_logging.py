@@ -4,7 +4,6 @@ import sys
 import logging
 from contextlib import contextmanager
 from functools import wraps
-from six import PY2
 
 
 class RPLogger(logging.getLoggerClass()):
@@ -39,12 +38,7 @@ class RPLogger(logging.getLoggerClass()):
             # exception on some versions of IronPython. We trap it here so that
             # IronPython can use logging.
             try:
-                if PY2:
-                    # In python2.7 findCaller() don't accept any parameters
-                    # and returns 3 elements
-                    fn, lno, func = self.findCaller()
-                else:
-                    fn, lno, func, sinfo = self.findCaller(stack_info)
+                fn, lno, func, sinfo = self.findCaller(stack_info)
 
             except ValueError:  # pragma: no cover
                 fn, lno, func = '(unknown file)', 0, '(unknown function)'

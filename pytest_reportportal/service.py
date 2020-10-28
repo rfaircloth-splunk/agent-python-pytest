@@ -28,8 +28,7 @@ from _pytest.unittest import TestCaseFunction, UnitTestCase
 
 from reportportal_client import ReportPortalService
 from reportportal_client.service import _dict_to_payload
-from six import with_metaclass
-from six.moves import queue
+import queue
 
 from .helpers import get_attributes
 
@@ -90,7 +89,7 @@ class Singleton(type):
         return cls._instances[cls]
 
 
-class PyTestServiceClass(with_metaclass(Singleton, object)):
+class PyTestServiceClass(metaclass=Singleton):
     """Pytest service class for reporting test results to the Report Portal."""
 
     def __init__(self):

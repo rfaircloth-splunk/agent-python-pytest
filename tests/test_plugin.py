@@ -1,6 +1,6 @@
 """This modules includes unit tests for the plugin."""
 
-from six.moves import mock
+import mock
 import os
 
 from delayed_assert import expect, assert_expectations
