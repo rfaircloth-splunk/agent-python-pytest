@@ -48,8 +48,18 @@ class RPLogger(logging.getLoggerClass()):
         if exc_info and not isinstance(exc_info, tuple):
             exc_info = sys.exc_info()
 
-        record = self.makeRecord(self.name, level, fn, lno, msg, args,
-                                exc_info, func, extra, sinfo)
+        record = self.makeRecord(
+            self.name,
+            level,
+            fn,
+            lno,
+            msg,
+            args,
+            exc_info,
+            func,
+            extra,
+            sinfo
+        )
 
         if not getattr(record, 'attachment', None):
             record.attachment = attachment
