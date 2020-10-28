@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "agent-python-pytest"
-version = "5.0.5"
+version = "5.0.6"
 description = "Agent for Reporting results of tests to the Report Portal"
 authors = ["epam"]
 license = "Apache-2.0"
