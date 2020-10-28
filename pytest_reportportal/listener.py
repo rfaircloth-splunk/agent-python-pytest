@@ -12,7 +12,7 @@ try:
     # This try/except can go away once we support pytest >= 3.3
     import _pytest.logging
 
-    PYTEST_HAS_LOGGING_PLUGIN = True
+    PYTEST_HAS_LOGGING_PLUGIN = False
     from .rp_logging import RPLogHandler, patching_logger_class
 except ImportError:
     PYTEST_HAS_LOGGING_PLUGIN = False
