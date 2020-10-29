@@ -179,7 +179,10 @@ def pytest_configure(config):
         config.py_test_service = pickle.loads(config.
                                               workerinput['py_test_service'])
 
-    config._reporter = RPReportListener(config.py_test_service, endpoint=endpoint)
+    config._reporter = RPReportListener(
+        config.py_test_service,
+        endpoint=endpoint
+        )
 
     if hasattr(config, '_reporter'):
         config.pluginmanager.register(config._reporter)
