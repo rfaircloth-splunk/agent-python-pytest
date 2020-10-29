@@ -179,9 +179,7 @@ def pytest_configure(config):
         config.py_test_service = pickle.loads(config.
                                               workerinput['py_test_service'])
 
-    # This check can go away once we support pytest >= 3.3
-    config._reporter = RPReportListener(config.py_test_service
-                                        endpoint=endpoint)
+    config._reporter = RPReportListener(config.py_test_service, endpoint=endpoint)
 
     if hasattr(config, '_reporter'):
         config.pluginmanager.register(config._reporter)
@@ -231,18 +229,6 @@ def pytest_addoption(parser):
         dest='rp_enabled',
         default=False,
         help='Enable ReportPortal plugin'
-    )
-
-    group.addoption(
-        '--rp-log-level',
-        dest='rp_log_level',
-        default=None,
-        help='Logging level for automated log records reporting'
-    )
-    parser.addini(
-        'rp_log_level',
-        default=None,
-        help='Logging level for automated log records reporting'
     )
 
     parser.addini(
