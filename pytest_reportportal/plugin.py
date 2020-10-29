@@ -15,19 +15,7 @@ from reportportal_client.errors import ResponseError
 from .service import PyTestServiceClass
 from .listener import RPReportListener
 from .helpers import get_attributes
-
-try:
-    # This try/except can go away once we support pytest >= 3.3
-    pkg_resources.get_distribution('pytest >= 3.3.0')
-    PYTEST_HAS_LOGGING_PLUGIN = True
-    try:
-        # This try/except can go away once we support pytest >= 5.4.0
-        from _pytest.logging import get_actual_log_level
-    except ImportError:
-        from _pytest.logging import get_log_level_for_setting as \
-            get_actual_log_level
-except pkg_resources.VersionConflict:
-    PYTEST_HAS_LOGGING_PLUGIN = False
+from _pytest.logging import get_actual_log_level
 
 log = logging.getLogger(__name__)
 
@@ -192,13 +180,9 @@ def pytest_configure(config):
         config.py_test_service = pickle.loads(config.
                                               workerinput['py_test_service'])
 
-    # set Pytest_Reporter and configure it
-    if PYTEST_HAS_LOGGING_PLUGIN:
-        # This check can go away once we support pytest >= 3.3
-        log_level = get_actual_log_level(config, 'rp_log_level')
-        if log_level is None:
-            log_level = logging.NOTSET
-    else:
+    # This check can go away once we support pytest >= 3.3
+    log_level = get_actual_log_level(config, 'rp_log_level')
+    if log_level is None:
         log_level = logging.NOTSET
 
     config._reporter = RPReportListener(config.py_test_service,
@@ -255,18 +239,17 @@ def pytest_addoption(parser):
         help='Enable ReportPortal plugin'
     )
 
-    if PYTEST_HAS_LOGGING_PLUGIN:
-        group.addoption(
-            '--rp-log-level',
-            dest='rp_log_level',
-            default=None,
-            help='Logging level for automated log records reporting'
-        )
-        parser.addini(
-            'rp_log_level',
-            default=None,
-            help='Logging level for automated log records reporting'
-        )
+    group.addoption(
+        '--rp-log-level',
+        dest='rp_log_level',
+        default=None,
+        help='Logging level for automated log records reporting'
+    )
+    parser.addini(
+        'rp_log_level',
+        default=None,
+        help='Logging level for automated log records reporting'
+    )
 
     parser.addini(
         'rp_uuid',

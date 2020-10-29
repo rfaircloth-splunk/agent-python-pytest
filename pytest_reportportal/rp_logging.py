@@ -78,7 +78,8 @@ class RPLogHandler(logging.Handler):
         logging.ERROR: 'ERROR',
         logging.CRITICAL: 'ERROR',
     }
-    _sorted_levelnos = sorted(_loglevel_map.keys(), reverse=True)
+    _sorted_levelnos = sorted(_loglevel_map.keys(), reverse=True)    
+    _worker_thread = None
 
     def __init__(self, py_test_service,
                  level=logging.NOTSET,
@@ -127,21 +128,24 @@ class RPLogHandler(logging.Handler):
         :return: log ID
         """
         msg = ''
+        self._setup_transport()
+        self._start_worker_thread()
 
         try:
             msg = self.format(record)
+            
         except (KeyboardInterrupt, SystemExit):
             raise
         except Exception:
             self.handleError(record)
-
-        for level in self._sorted_levelnos:
-            if level <= record.levelno:
-                return self.py_test_service.post_log(
-                    msg,
-                    loglevel=self._loglevel_map[level],
-                    attachment=record.__dict__.get('attachment', None),
-                )
+        
+        # for level in self._sorted_levelnos:
+        #     if level <= record.levelno:
+        #         return self.py_test_service.post_log(
+        #             msg,
+        #             loglevel=self._loglevel_map[level],
+        #             attachment=record.__dict__.get('attachment', None),
+        #         )
 
 
 @contextmanager

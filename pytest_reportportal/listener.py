@@ -8,15 +8,8 @@ except ImportError:
     from cgi import escape  # python2
 
 
-try:
-    # This try/except can go away once we support pytest >= 3.3
-    import _pytest.logging
-
-    PYTEST_HAS_LOGGING_PLUGIN = False
-    from .rp_logging import RPLogHandler, patching_logger_class
-except ImportError:
-    PYTEST_HAS_LOGGING_PLUGIN = False
-
+import _pytest.logging
+from .rp_logging import RPLogHandler, patching_logger_class
 
 class RPReportListener(object):
     """RPReportListener class."""
@@ -36,12 +29,11 @@ class RPReportListener(object):
         self.result = None
         self.issue = {}
         self._log_level = log_level
-        if PYTEST_HAS_LOGGING_PLUGIN:
-            self._log_handler = \
-                RPLogHandler(py_test_service=py_test_service,
-                             level=log_level,
-                             filter_client_logs=True,
-                             endpoint=endpoint)
+        self._log_handler = \
+            RPLogHandler(py_test_service=py_test_service,
+                            level=log_level,
+                            filter_client_logs=True,
+                            endpoint=endpoint)
 
     @pytest.hookimpl(hookwrapper=True)
     def pytest_runtest_protocol(self, item):
@@ -53,14 +45,10 @@ class RPReportListener(object):
         """
         self._add_issue_id_marks(item)
         item_id = self.PyTestService.start_pytest_item(item)
-        if PYTEST_HAS_LOGGING_PLUGIN:
-            # This check can go away once we support pytest >= 3.3
-            with patching_logger_class():
-                with _pytest.logging.catching_logs(self._log_handler,
-                                                   level=self._log_level):
-                    yield
-        else:
-            yield
+        with patching_logger_class():
+            with _pytest.logging.catching_logs(self._log_handler,
+                                                level=self._log_level):
+                yield
         # Finishing item in RP
         self.PyTestService.finish_pytest_item(
             item, item_id, self.result or 'SKIPPED', self.issue or None)
