@@ -15,7 +15,6 @@ from reportportal_client.errors import ResponseError
 from .service import PyTestServiceClass
 from .listener import RPReportListener
 from .helpers import get_attributes
-from _pytest.logging import get_actual_log_level
 
 log = logging.getLogger(__name__)
 
@@ -181,12 +180,7 @@ def pytest_configure(config):
                                               workerinput['py_test_service'])
 
     # This check can go away once we support pytest >= 3.3
-    log_level = get_actual_log_level(config, 'rp_log_level')
-    if log_level is None:
-        log_level = logging.NOTSET
-
-    config._reporter = RPReportListener(config.py_test_service,
-                                        log_level=log_level,
+    config._reporter = RPReportListener(config.py_test_service
                                         endpoint=endpoint)
 
     if hasattr(config, '_reporter'):

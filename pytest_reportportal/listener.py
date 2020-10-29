@@ -16,23 +16,18 @@ class RPReportListener(object):
     """RPReportListener class."""
 
     def __init__(self, py_test_service,
-                 log_level=logging.NOTSET,
                  endpoint=None):
         """Initialize RPReport Listener instance.
 
         :param py_test_service: PyTestServiceClass instance
-        :param log_level:       One of the 'CRITICAL', 'ERROR',
-                                'WARNING','INFO','DEBUG', 'NOTSET'
         :param endpoint:        Report Portal API endpoint
         """
         # Test Item result
         self.PyTestService = py_test_service
         self.result = None
         self.issue = {}
-        self._log_level = log_level
         self._log_handler = RPLogHandler(
             py_test_service=py_test_service,
-            level=log_level,
             filter_client_logs=True,
             endpoint=endpoint
         )
@@ -49,8 +44,7 @@ class RPReportListener(object):
         item_id = self.PyTestService.start_pytest_item(item)
         with patching_logger_class():
             with _pytest.logging.catching_logs(
-                self._log_handler,
-                level=self._log_level
+                self._log_handler
             ):
                 yield
         # Finishing item in RP
