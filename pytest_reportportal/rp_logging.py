@@ -128,8 +128,8 @@ class RPLogHandler(logging.Handler):
         :return: log ID
         """
         msg = ''
-        self._setup_transport()
-        self._start_worker_thread()
+        #self._setup_transport()
+        #self._start_worker_thread()
 
         try:
             msg = self.format(record)
